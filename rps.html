@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+
+    <body>
+        <h1>Rock Paper Scissors</h1>
+
+        <div class="container">
+            <div class="options">
+                <button class="rock">Rock</button>
+                <button class="paper">Paper</button>
+                <button class="scissors">Scissors</button>
+            </div>
+
+            <div class="scoreBoard">
+                <div class="playerScore">Player Score: 0</div>
+                <div class="computerScore">Computer Score: 0</div>
+            </div>
+
+            <div class="scoreMessage"></div>
+            <button class="resetBtn">Reset</button>
+        </div>
+        
+        <script>
+            const rock = document.querySelector(".rock");
+            const paper = document.querySelector(".paper");
+            const scissors = document.querySelector(".scissors");
+            const container = document.querySelector('.container');
+            const pScore = document.querySelector('.playerScore');
+            const cScore = document.querySelector('.computerScore');
+            const resetBtn = document.querySelector('.resetBtn');
+            let scoreMessage = document.querySelector(".scoreMessage");
+            let playerScore = 0;
+            let computerScore = 0;
+            let roundWinner = '';
+
+            rock.addEventListener("click", () => startGame('ROCK'));
+            paper.addEventListener("click", () => startGame('PAPER'));
+            scissors.addEventListener("click", () => startGame('SCISSORS'));
+            resetBtn.addEventListener('click', () => resetGame());
+
+            function startGame(playerChoice) {
+                if (isGameOver()) {
+                    endGame();
+                    return;
+                }
+                let computerChoice = getComputerChoice();
+                playRound(playerChoice, computerChoice);
+            }
+
+            function playRound(playerChoice, computerChoice) {
+                if (playerChoice == computerChoice) {
+                    roundWinner = 'tie';
+                }
+                if ((playerChoice === 'ROCK' && computerChoice === 'SCISSORS') ||
+                    (playerChoice === 'PAPER' && computerChoice === 'ROCK') ||
+                    (playerChoice === 'SCISSORS' && computerChoice === 'PAPER')) {
+                        playerScore++;
+                        roundWinner = 'Player';
+                    }
+                if ((computerChoice === 'ROCK' && playerChoice === 'SCISSORS') ||
+                    (computerChoice === 'PAPER' && playerChoice === 'ROCK') ||
+                    (computerChoice === 'SCISSORS' && playerChoice === 'PAPER')) {
+                        computerScore++;
+                        roundWinner = 'Computer';
+                    }
+                    updateScore(roundWinner, playerChoice, computerChoice);
+            }
+
+            function getComputerChoice() {
+                let computerChoice = Math.floor(Math.random() * 3);
+
+                switch (computerChoice) {
+                    case 0: 
+                        return 'ROCK';
+                    case 1:
+                        return 'PAPER';
+                    case 2:
+                        return 'SCISSORS';
+                }
+            }
+
+
+            function updateScore(roundWinner, playerChoice, computerChoice) {
+                if (roundWinner === 'tie') {
+                    scoreMessage.textContent = "Round tie";
+                } else if (roundWinner === 'Player') {
+                    scoreMessage.textContent = "Player wins";
+                    pScore.textContent = `Player score: ${playerScore}`;
+                } else if (roundWinner === 'Computer') {
+                    scoreMessage.textContent = "Computer wins";
+                    cScore.textContent = `Computer score: ${computerScore}`;
+                }
+
+                return;
+            }
+
+            function isGameOver() {
+                return playerScore === 5 || computerScore === 5;
+            }
+
+            function endGame() {
+                if (playerScore == 5) {
+                    scoreMessage.textContent = 'Player wins the game';
+                }
+
+                if (computerScore == 5) {
+                    scoreMessage.textContent = 'Computer wins the game';
+                }
+            }
+
+            function resetGame() {
+                playerScore = 0;
+                computerScore = 0;
+                pScore.textContent = `Player score: ${playerScore}`;
+                cScore.textContent = `Computer score: ${computerScore}`;
+                scoreMessage.textContent = '';
+            }
+        </script>
+
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                background-color: navy;
+            }
+
+            .container { 
+                display: flex;
+                background-color: grey;
+                border: 2px black solid;
+                padding: 20px;
+                flex-direction: column;
+            }
+
+            button {
+                margin: 15px;
+                height: 50px;
+                width: 100px;
+                border: 2px black solid;
+            }
+
+            .scoreBoard {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .resetBtn {
+                align-self: center;
+            }
+
+            .scoreMessage {
+                align-self: center;
+                margin: 5px;
+            }
+
+        </style>
+    </body>
+</html>
